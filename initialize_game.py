@@ -26,14 +26,15 @@ def algorithm(draw, grid, start, end):
     open_set = PriorityQueue()
     open_set.put((0, count, start))
     came_from = {}
-    g_score = {spot: float("inf") for row in grid for spot in row}
-    g_score[start] = 0
-    f_score = {spot: float("inf") for row in grid for spot in row}
-    f_score[start] = distance_heuristic(start.get_position(), end.get_position())  # heuristic estimates how far we
+
+    path_score = {spot: float("inf") for row in grid for spot in row}
+    path_score[start] = 0
+
+    pos_score = {spot: float("inf") for row in grid for spot in row}
+    pos_score[start] = distance_heuristic(start.get_position(), end.get_position())  # heuristic estimates how far we
     # are from the end at the beginning
 
-    # problem: algorithm is not finding the quickest path between two points due to f-score starting at 0
-    open_set_hash = {start}
+    node_set = {start}
 
     while not open_set.empty():
         for event in pygame.event.get():
@@ -41,7 +42,7 @@ def algorithm(draw, grid, start, end):
                 pygame.quit()
 
         current = open_set.get()[2]
-        open_set_hash.remove(current)
+        node_set.remove(current)
 
         if current == end:
             reconstruct_path(came_from, end, draw)  # makes the path
@@ -49,16 +50,16 @@ def algorithm(draw, grid, start, end):
             return True
 
         for neighbor in current.neighbors:
-            temp_g_score = g_score[current] + 1
+            tp_score = path_score[current] + 1
 
-            if temp_g_score < g_score[neighbor]:  # if current g-score is better than neighbor, then update the g-score
+            if tp_score < path_score[neighbor]:  # if current g-score is better than neighbor, then update the g-score
                 came_from[neighbor] = current
-                g_score[neighbor] = temp_g_score
-                f_score[neighbor] = temp_g_score + distance_heuristic(neighbor.get_position(), end.get_position())
-                if neighbor not in open_set_hash:
+                path_score[neighbor] = tp_score
+                pos_score[neighbor] = tp_score + distance_heuristic(neighbor.get_position(), end.get_position())
+                if neighbor not in node_set:
                     count += 1
-                    open_set.put((f_score[neighbor], count, neighbor))
-                    open_set_hash.add(neighbor)
+                    open_set.put((pos_score[neighbor], count, neighbor))
+                    node_set.add(neighbor)
                     neighbor.valid_point()
 
         draw()
