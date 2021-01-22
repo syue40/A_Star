@@ -17,7 +17,7 @@ def distance_heuristic(p1, p2):
 def reconstruct_path(came_from, current, draw):
     while current in came_from:
         current = came_from[current]
-        current.make_path()
+        current.path()
         draw()
 
 
@@ -45,7 +45,7 @@ def algorithm(draw, grid, start, end):
 
         if current == end:
             reconstruct_path(came_from, end, draw)  # makes the path
-            end.make_end()
+            end.endpoint()
             return True
 
         for neighbor in current.neighbors:
@@ -129,14 +129,14 @@ def controller(win, width):
                 spot = grid[row][col]
                 if not start and spot != end:
                     start = spot
-                    start.make_start()
+                    start.start()
 
                 elif not end and spot != start:
                     end = spot
-                    end.make_end()
+                    end.endpoint()
 
                 elif spot != end and spot != start:
-                    spot.make_barrier()
+                    spot.initialize_wall()
 
             elif pygame.mouse.get_pressed()[2]:  # RIGHT
                 pos = pygame.mouse.get_pos()

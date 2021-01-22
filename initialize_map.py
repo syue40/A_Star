@@ -24,11 +24,8 @@ class Node:
     def get_position(self):
         return self.row, self.col
 
-    def is_barrier(self):
+    def wall(self):
         return self.color == BLACK
-
-    def start_point(self):
-        return self.color == NAVY
 
     def is_end(self):
         return self.color == TURQUOISE
@@ -36,19 +33,19 @@ class Node:
     def reset(self):
         self.color = WHITE
 
-    def make_start(self):
+    def start(self):
         self.color = NAVY
 
     def valid_point(self):
         self.color = LIGHTGREY
 
-    def make_barrier(self):
+    def initialize_wall(self):
         self.color = BLACK
 
-    def make_end(self):
+    def endpoint(self):
         self.color = TURQUOISE
 
-    def make_path(self):
+    def path(self):
         self.color = LIGHTBLUE
 
     def draw(self, win):
@@ -56,16 +53,16 @@ class Node:
 
     def update_neighbors(self, grid):
         self.neighbors = []
-        if self.row < self.total_rows - 1 and not grid[self.row + 1][self.col].is_barrier():  # DOWN
+        if self.row < self.total_rows - 1 and not grid[self.row + 1][self.col].wall():  # DOWN
             self.neighbors.append(grid[self.row + 1][self.col])
 
-        if self.row > 0 and not grid[self.row - 1][self.col].is_barrier():  # UP
+        if self.row > 0 and not grid[self.row - 1][self.col].wall():  # UP
             self.neighbors.append(grid[self.row - 1][self.col])
 
-        if self.col < self.total_rows - 1 and not grid[self.row][self.col + 1].is_barrier():  # RIGHT
+        if self.col < self.total_rows - 1 and not grid[self.row][self.col + 1].wall():  # RIGHT
             self.neighbors.append(grid[self.row][self.col + 1])
 
-        if self.col > 0 and not grid[self.row][self.col - 1].is_barrier():  # LEFT
+        if self.col > 0 and not grid[self.row][self.col - 1].wall():  # LEFT
             self.neighbors.append(grid[self.row][self.col - 1])
 
     def __lt__(self, other):
