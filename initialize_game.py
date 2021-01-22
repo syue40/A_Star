@@ -59,12 +59,12 @@ def algorithm(draw, grid, start, end):
                     count += 1
                     open_set.put((f_score[neighbor], count, neighbor))
                     open_set_hash.add(neighbor)
-                    neighbor.make_open()
+                    neighbor.valid_point()
 
         draw()
 
         if current != start:
-            current.make_closed()
+            current.valid_point()
 
     return False
 

@@ -24,9 +24,6 @@ class Node:
     def get_position(self):
         return self.row, self.col
 
-    def closed_path(self):
-        return self.color == LIGHTGREY
-
     def is_barrier(self):
         return self.color == BLACK
 
@@ -42,10 +39,7 @@ class Node:
     def make_start(self):
         self.color = NAVY
 
-    def make_closed(self):
-        self.color = LIGHTGREY
-
-    def make_open(self):
+    def valid_point(self):
         self.color = LIGHTGREY
 
     def make_barrier(self):
