@@ -1,6 +1,8 @@
 import pygame
 from queue import PriorityQueue
 from initialize_map import Node
+from initialize_map import GREY
+from initialize_map import WHITE
 
 ROWS = 40
 WIDTH = 800
@@ -52,18 +54,16 @@ def algorithm(draw, grid, start, end):
         for neighbor in current.neighbors:
             tp_score = path_score[current] + 1
 
-            if tp_score < path_score[neighbor]:  # if current g-score is better than neighbor, then update the g-score
+            if tp_score < path_score[neighbor]:  # if current tp_score is better than neighbor, then update the tp-score
                 came_from[neighbor] = current
                 path_score[neighbor] = tp_score
                 pos_score[neighbor] = tp_score + distance_heuristic(neighbor.get_position(), end.get_position())
                 if neighbor not in node_set:
                     count += 1
                     open_set.put((pos_score[neighbor], count, neighbor))
+                    # since neighbor has better path, update the final path
                     node_set.add(neighbor)
-                    neighbor.valid_point()
-
         draw()
-
         if current != start:
             current.valid_point()
 
@@ -85,13 +85,13 @@ def generate_board(rows, width):
 def draw_on_board(win, rows, width):
     gap = width // rows
     for i in range(rows):
-        pygame.draw.line(win, (128, 128, 128), (0, i * gap), (width, i * gap))  # draw horizontal lines
+        pygame.draw.line(win, (GREY), (0, i * gap), (width, i * gap))  # draw horizontal lines
         for j in range(rows):
-            pygame.draw.line(win, (128, 128, 128), (j * gap, 0), (j * gap, width))  # draw vertical lines
+            pygame.draw.line(win, (GREY), (j * gap, 0), (j * gap, width))  # draw vertical lines
 
 
 def draw(win, grid, rows, width):
-    win.fill((255, 255, 255))
+    win.fill((WHITE))
 
     for row in grid:
         for spot in row:
